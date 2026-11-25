@@ -1,0 +1,52 @@
+{
+  "schema": "quaraudit.truth/v1",
+  "case_id": "TRUTH-SMALL",
+  "expect_files": [
+    { "file_id": "F01",  "verdict": "HELD", "witness_records": ["REF-01"] },
+    { "file_id": "F02",  "verdict": "HELD", "witness_records": ["REF-02"] },
+    { "file_id": "F03",  "verdict": "HELD", "witness_records": ["REF-03A", "REF-03B", "REF-03C"] },
+    { "file_id": "F04",  "verdict": "HELD", "witness_records": ["REF-04"] },
+    { "file_id": "F05",  "verdict": "HELD", "witness_records": ["REF-05"] },
+    { "file_id": "F06",  "verdict": "FREE" },
+    { "file_id": "F07",  "verdict": "BLOCKED", "reason_code": "RENAME_BATCH_UNDONE" },
+    { "file_id": "F08",  "verdict": "BLOCKED", "reason_code": "ALIAS_INACTIVE_AT_WATERMARK" },
+    { "file_id": "F10",  "verdict": "BLOCKED", "reason_code": "TENANT_BOUNDARY_CROSSED" },
+    { "file_id": "F11",  "verdict": "FREE" },
+    { "file_id": "F12A", "verdict": "HELD", "witness_records": ["REF-12"] },
+    { "file_id": "F12B", "verdict": "HELD", "witness_records": ["REF-12"] },
+    { "file_id": "F12C", "verdict": "FREE" },
+    { "file_id": "F14",  "verdict": "HELD", "witness_records": ["REF-14A"] }
+  ],
+  "expect_records": [
+    { "record_id": "REF-01",   "status": "COMPLETE" },
+    { "record_id": "REF-02",   "status": "COMPLETE" },
+    { "record_id": "REF-03A",  "status": "COMPLETE" },
+    { "record_id": "REF-03B",  "status": "COMPLETE" },
+    { "record_id": "REF-03C",  "status": "COMPLETE" },
+    { "record_id": "REF-04",   "status": "COMPLETE" },
+    { "record_id": "REF-05",   "status": "COMPLETE" },
+    { "record_id": "REF-06",   "status": "REVOKED",   "reason_code": "RECORD_BATCH_UNDONE" },
+    { "record_id": "REF-07",   "status": "BROKEN",    "reason_code": "RENAME_BATCH_UNDONE" },
+    { "record_id": "REF-08",   "status": "BROKEN",    "reason_code": "ALIAS_INACTIVE_AT_WATERMARK" },
+    { "record_id": "REF-09",   "status": "BROKEN",    "reason_code": "ALIAS_CYCLE" },
+    { "record_id": "REF-10",   "status": "BROKEN",    "reason_code": "TENANT_BOUNDARY_CROSSED" },
+    { "record_id": "REF-11",   "status": "SELF_ONLY", "reason_code": "SELF_SANDBOX_REFERENCE" },
+    { "record_id": "REF-12",   "status": "COMPLETE" },
+    { "record_id": "REF-13",   "status": "BROKEN",    "reason_code": "TARGET_NOT_RETAINED" },
+    { "record_id": "REF-14A",  "status": "COMPLETE" },
+    { "record_id": "REF-14B",  "status": "BROKEN",    "reason_code": "TARGET_NOT_RETAINED" }
+  ],
+  "expect_summary": {
+    "logical_files": 14,
+    "held": 8,
+    "blocked": 3,
+    "free": 3,
+    "records_total": 17,
+    "records_complete": 9,
+    "records_broken": 6,
+    "records_revoked": 1,
+    "records_self_only": 1,
+    "boundary_violations": 1
+  },
+  "expect_boundary": { "count": 1, "kind": "TENANT_BOUNDARY_CROSSED" }
+}

@@ -1,0 +1,12 @@
+{
+  "alias_routed_files": 2000,
+  "cross_tenant_repoint": "blocked:TENANT_BOUNDARY_CROSSED",
+  "elapsed_ms": 395,
+  "files": 50000,
+  "other_tenant_files": 40000,
+  "pass": true,
+  "prefix_trap_files": 1000,
+  "resolution_changed": 2000,
+  "test": "TestFiftyThousand_AliasChangeDoesNotCrossBoundaries",
+  "unrelated_paths_moved": 0
+}

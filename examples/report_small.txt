@@ -1,0 +1,284 @@
+================================================================
+ 隔离目录保留物 · 跨沙箱引用离线审计报告
+ 案例: TRUTH-SMALL   模式: quaraudit.report/v1
+ 说明: 重命名 / 撤销同步 / 水位别名 / 租户边界 小型真值集
+ 隔离根(逻辑路径): C:\Isolation\T100
+ 归属沙箱: SBX-QUAR
+================================================================
+
+[总览] 清单输入 14 行 -> 去重后逻辑文件 14 个 (合并重复行 0)
+       不可回收 HELD=8  证据断环 BLOCKED=3  可回收 FREE=3
+       引用记录 17: 完整=9 断环=6 已撤销=1 仅本沙箱=1
+       引用链 18 条 (完整 10); 边界违规 1
+
+----------------------------------------------------------------
+[1] 最小不能回收文件集合 (8 个唯一逻辑目标)
+    注: 同一逻辑目标的多条别名/记录只计一次。
+----------------------------------------------------------------
+   1. F01  [c:\isolation\t100\files\f01-direct.bin]
+      租户: T-ACME
+      见证记录: REF-01
+      引用链:   CH-REF-01-1
+   2. F02  [c:\isolation\t100\files\f02-alias.bin]
+      租户: T-ACME
+      见证记录: REF-02
+      引用链:   CH-REF-02-1
+   3. F03  [c:\isolation\t100\files\f03-multi.bin]
+      租户: T-ACME
+      见证记录: REF-03A, REF-03B, REF-03C
+      引用链:   CH-REF-03A-1, CH-REF-03B-1, CH-REF-03C-1
+   4. F04  [c:\isolation\t100\files\sub dir\f04 spaced name.bin]
+      租户: T-ACME
+      见证记录: REF-04
+      引用链:   CH-REF-04-1
+   5. F05  [c:\isolation\t100\files\renamed\f05-new.bin]
+      租户: T-ACME
+      见证记录: REF-05
+      引用链:   CH-REF-05-1
+   6. F12A  [c:\isolation\t100\files\tree\a\fa.bin]
+      租户: T-ACME
+      见证记录: REF-12
+      引用链:   CH-REF-12-1
+   7. F12B  [c:\isolation\t100\files\tree\b\fb.bin]
+      租户: T-ACME
+      见证记录: REF-12
+      引用链:   CH-REF-12-2
+   8. F14  [c:\isolation\t100\oldstore\f14-wm.bin]
+      租户: T-ACME
+      见证记录: REF-14A
+      引用链:   CH-REF-14A-1
+
+----------------------------------------------------------------
+[2] 断环/证据待定 (3) — 每条都给出明确阻断原因
+----------------------------------------------------------------
+  ! F07  c:\isolation\t100\files\renamed\f07-new.bin
+      阻断原因: RENAME_BATCH_UNDONE
+      详情: path only forwards via a rename from batch "B-SYNC-7" that undo_sync revoked
+      相关声称记录: REF-07
+  ! F08  c:\isolation\t100\wf\f08-wm.bin
+      阻断原因: ALIAS_INACTIVE_AT_WATERMARK
+      详情: alias AL-FUTURE is first mapped at a later watermark than the reference
+      相关声称记录: REF-08
+  ! F10  c:\isolation\t100\files\f10-tenant.bin
+      阻断原因: TENANT_BOUNDARY_CROSSED
+      详情: alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX
+      相关声称记录: REF-10
+
+----------------------------------------------------------------
+[3] 可回收文件 (3)
+----------------------------------------------------------------
+  o F06    c:\isolation\t100\files\f06-undone.bin
+  o F11    c:\isolation\t100\files\f11-self.bin
+  o F12C   c:\isolation\t100\files\tree-other\fc.bin
+
+----------------------------------------------------------------
+[4] 目录/租户边界违规 (1) — 别名更换不得造成此类跨越
+----------------------------------------------------------------
+  x 记录 REF-10 -> 文件 F10  [TENANT_BOUNDARY_CROSSED]
+      alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX
+
+----------------------------------------------------------------
+[5] 可验证引用链明细 (18 条)
+----------------------------------------------------------------
+
+  CH-REF-01-1  记录=REF-01 文件=F01 状态=COMPLETE
+      · [record] synthetic reference record REF-01 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\f01-direct.bin
+          c:\isolation\\T100/files\F01-direct.BIN
+       -> C:\isolation\T100\files\F01-direct.BIN
+      · [inventory_match] resolved logical target matches retained object F01
+          c:\isolation\t100\files\f01-direct.bin
+       -> C:\Isolation\T100\files\f01-direct.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-02-1  记录=REF-02 文件=F02 状态=COMPLETE
+      · [record] synthetic reference record REF-02 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> d:\sbx\web\mnt\q\f02-alias.bin
+          D:\SBX\Web\MNT\q\f02-alias.bin
+       -> D:\SBX\Web\MNT\q\f02-alias.bin
+      · [alias_reparse] reparse alias AL-MNT active at watermark 1
+          d:\sbx\web\mnt\q\f02-alias.bin
+       -> c:\isolation\t100\files\f02-alias.bin
+      · [inventory_match] resolved logical target matches retained object F02
+          c:\isolation\t100\files\f02-alias.bin
+       -> C:\Isolation\T100\files\f02-alias.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-03A-1  记录=REF-03A 文件=F03 状态=COMPLETE
+      · [record] synthetic reference record REF-03A from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> m:\aa\f03-multi.bin
+          M:\\aa\\f03-multi.bin
+       -> M:\aa\f03-multi.bin
+      · [alias_reparse] reparse alias AL-A active at watermark 1
+          m:\aa\f03-multi.bin
+       -> c:\isolation\t100\files\f03-multi.bin
+      · [inventory_match] resolved logical target matches retained object F03
+          c:\isolation\t100\files\f03-multi.bin
+       -> C:\Isolation\T100\files\f03-multi.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-03B-1  记录=REF-03B 文件=F03 状态=COMPLETE
+      · [record] synthetic reference record REF-03B from sandbox SBX-ANALYTICS
+      · [normalize] drive-case/separator/whitespace canonicalization -> b:\base\files-link\f03-multi.bin
+          B:\base\files-link\f03-multi.bin
+       -> B:\base\files-link\f03-multi.bin
+      · [alias_reparse] reparse alias AL-BASE active at watermark 1
+          b:\base\files-link\f03-multi.bin
+       -> c:\isolation\t100\files-link\f03-multi.bin
+      · [alias_reparse] reparse alias AL-LINK active at watermark 1
+          c:\isolation\t100\files-link\f03-multi.bin
+       -> c:\isolation\t100\files\f03-multi.bin
+      · [inventory_match] resolved logical target matches retained object F03
+          c:\isolation\t100\files\f03-multi.bin
+       -> C:\Isolation\T100\files\f03-multi.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-03C-1  记录=REF-03C 文件=F03 状态=COMPLETE
+      · [record] synthetic reference record REF-03C from sandbox SBX-BACKUP
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\f03-multi.bin
+          C:\Isolation\T100\.\files\\f03-multi.bin
+       -> C:\Isolation\T100\files\f03-multi.bin
+      · [inventory_match] resolved logical target matches retained object F03
+          c:\isolation\t100\files\f03-multi.bin
+       -> C:\Isolation\T100\files\f03-multi.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-04-1  记录=REF-04 文件=F04 状态=COMPLETE
+      · [record] synthetic reference record REF-04 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\sub dir\f04 spaced name.bin
+          C:/Isolation/T100/files/sub dir/f04 spaced name.bin
+       -> C:\Isolation\T100\files\sub dir\f04 spaced name.bin
+      · [inventory_match] resolved logical target matches retained object F04
+          c:\isolation\t100\files\sub dir\f04 spaced name.bin
+       -> C:\Isolation\T100\files\sub dir\f04 spaced name.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-05-1  记录=REF-05 文件=F05 状态=COMPLETE
+      · [record] synthetic reference record REF-05 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\renamed\f05-old.bin
+          C:\Isolation\T100\files\renamed\f05-old.bin
+       -> C:\Isolation\T100\files\renamed\f05-old.bin
+      · [rename_forward] forwarded across an active rename arrival
+          c:\isolation\t100\files\renamed\f05-old.bin
+       -> c:\isolation\t100\files\renamed\f05-new.bin
+      · [inventory_match] resolved logical target matches retained object F05
+          c:\isolation\t100\files\renamed\f05-new.bin
+       -> C:\Isolation\T100\files\renamed\f05-new.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-06-1  记录=REF-06 文件=- 状态=REVOKED
+      原因码: RECORD_BATCH_UNDONE — record arrived in sync batch "B-SYNC-6" which was revoked by undo_sync
+      · [record] synthetic reference record REF-06 from sandbox SBX-WEB
+      · [terminal] record arrived in sync batch "B-SYNC-6" which was revoked by undo_sync
+
+  CH-REF-07-1  记录=REF-07 文件=F07 状态=BROKEN
+      原因码: RENAME_BATCH_UNDONE — path only forwards via a rename from batch "B-SYNC-7" that undo_sync revoked
+      · [record] synthetic reference record REF-07 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\renamed\f07-old.bin
+          C:\Isolation\T100\files\renamed\f07-old.bin
+       -> C:\Isolation\T100\files\renamed\f07-old.bin
+      · [rename_revoked] path only forwards via a rename from batch "B-SYNC-7" that undo_sync revoked
+          c:\isolation\t100\files\renamed\f07-old.bin
+       -> c:\isolation\t100\files\renamed\f07-new.bin
+      · [terminal] chain broken: RENAME_BATCH_UNDONE
+
+  CH-REF-08-1  记录=REF-08 文件=F08 状态=BROKEN
+      原因码: ALIAS_INACTIVE_AT_WATERMARK — alias AL-FUTURE is first mapped at a later watermark than the reference
+      · [record] synthetic reference record REF-08 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> w:\future_link\f08-wm.bin
+          W:\future_link\f08-wm.bin
+       -> W:\future_link\f08-wm.bin
+      · [terminal] chain broken: ALIAS_INACTIVE_AT_WATERMARK
+
+  CH-REF-09-1  记录=REF-09 文件=- 状态=BROKEN
+      原因码: ALIAS_CYCLE — alias cycle detected revisiting AL-CA
+      · [record] synthetic reference record REF-09 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> q:\cyca\x.bin
+          Q:\cycA\x.bin
+       -> Q:\cycA\x.bin
+      · [alias_reparse] reparse alias AL-CA active at watermark 1
+          q:\cyca\x.bin
+       -> q:\cycb\x.bin
+      · [alias_reparse] reparse alias AL-CB active at watermark 1
+          q:\cycb\x.bin
+       -> q:\cyca\x.bin
+      · [terminal] chain broken: ALIAS_CYCLE
+
+  CH-REF-10-1  记录=REF-10 文件=F10 状态=BROKEN
+      原因码: TENANT_BOUNDARY_CROSSED — alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX
+      · [record] synthetic reference record REF-10 from sandbox SBX-GX
+      · [normalize] drive-case/separator/whitespace canonicalization -> v:\tenants\globex\portal\f10-tenant.bin
+          V:\Tenants\globex\portal\f10-tenant.bin
+       -> V:\Tenants\globex\portal\f10-tenant.bin
+      · [alias_reparse] reparse alias AL-X-BORDER active at watermark 2
+          v:\tenants\globex\portal\f10-tenant.bin
+       -> c:\isolation\t100\files\f10-tenant.bin
+      · [terminal] chain broken: TENANT_BOUNDARY_CROSSED
+
+  CH-REF-11-1  记录=REF-11 文件=F11 状态=SELF_ONLY
+      原因码: SELF_SANDBOX_REFERENCE — reference originates from the quarantine-owning sandbox, not another sandbox
+      · [record] synthetic reference record REF-11 from sandbox SBX-QUAR
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\f11-self.bin
+          C:\Isolation\T100\files\f11-self.bin
+       -> C:\Isolation\T100\files\f11-self.bin
+      · [inventory_match] resolved logical target matches retained object F11
+          c:\isolation\t100\files\f11-self.bin
+       -> C:\Isolation\T100\files\f11-self.bin
+      · [terminal] reference originates from the quarantine-owning sandbox, not another sandbox
+
+  CH-REF-12-1  记录=REF-12 文件=F12A 状态=COMPLETE
+      · [record] synthetic reference record REF-12 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\tree
+          C:\Isolation\T100\files\tree
+       -> C:\Isolation\T100\files\tree
+      · [inventory_prefix_match] resolved logical target matches retained object F12A
+          c:\isolation\t100\files\tree
+       -> C:\Isolation\T100\files\tree\a\fa.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-12-2  记录=REF-12 文件=F12B 状态=COMPLETE
+      · [record] synthetic reference record REF-12 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\files\tree
+          C:\Isolation\T100\files\tree
+       -> C:\Isolation\T100\files\tree
+      · [inventory_prefix_match] resolved logical target matches retained object F12B
+          c:\isolation\t100\files\tree
+       -> C:\Isolation\T100\files\tree\b\fb.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-13-1  记录=REF-13 文件=- 状态=BROKEN
+      原因码: TARGET_NOT_RETAINED — resolved logical target c:\isolation\t100\gone\missing.bin matches no retained file (record may be stale or point outside quarantine)
+      · [record] synthetic reference record REF-13 from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> c:\isolation\t100\gone\missing.bin
+          C:\Isolation\T100\gone\missing.bin
+       -> C:\Isolation\T100\gone\missing.bin
+      · [terminal] chain broken: TARGET_NOT_RETAINED
+
+  CH-REF-14A-1  记录=REF-14A 文件=F14 状态=COMPLETE
+      · [record] synthetic reference record REF-14A from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> r:\rot\f14-wm.bin
+          R:\rot\f14-wm.bin
+       -> R:\rot\f14-wm.bin
+      · [alias_reparse] reparse alias AL-ROT active at watermark 1
+          r:\rot\f14-wm.bin
+       -> c:\isolation\t100\oldstore\f14-wm.bin
+      · [inventory_match] resolved logical target matches retained object F14
+          c:\isolation\t100\oldstore\f14-wm.bin
+       -> C:\Isolation\T100\oldstore\f14-wm.bin
+      · [terminal] external sandbox reference verified end to end
+
+  CH-REF-14B-1  记录=REF-14B 文件=- 状态=BROKEN
+      原因码: TARGET_NOT_RETAINED — resolved logical target c:\isolation\t100\newstore\f14-wm.bin matches no retained file (record may be stale or point outside quarantine)
+      · [record] synthetic reference record REF-14B from sandbox SBX-WEB
+      · [normalize] drive-case/separator/whitespace canonicalization -> r:\rot\f14-wm.bin
+          R:\rot\f14-wm.bin
+       -> R:\rot\f14-wm.bin
+      · [alias_reparse] reparse alias AL-ROT active at watermark 7
+          r:\rot\f14-wm.bin
+       -> c:\isolation\t100\newstore\f14-wm.bin
+      · [terminal] chain broken: TARGET_NOT_RETAINED
+
+================================================================
+ 结论: 8 个逻辑文件确有他沙箱有效引用，不可回收；3 个存在断环
+       需按阻断原因核查；其余 3 个在逻辑证据层面可回收。
+================================================================

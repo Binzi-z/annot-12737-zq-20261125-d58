@@ -1,0 +1,55 @@
+独立验证器逐条对照 (independent verifier vs hand-authored truth)
+================================================================
+[PASS] invariant case_id        report case_id="TRUTH-SMALL" truth="TRUTH-SMALL"
+[PASS] file      F01            verdict=HELD reason=- witnesses=[REF-01]
+[PASS] file      F02            verdict=HELD reason=- witnesses=[REF-02]
+[PASS] file      F03            verdict=HELD reason=- witnesses=[REF-03A REF-03B REF-03C]
+[PASS] file      F04            verdict=HELD reason=- witnesses=[REF-04]
+[PASS] file      F05            verdict=HELD reason=- witnesses=[REF-05]
+[PASS] file      F06            verdict=FREE reason=- witnesses=[]
+[PASS] file      F07            verdict=BLOCKED reason=RENAME_BATCH_UNDONE witnesses=[]
+[PASS] file      F08            verdict=BLOCKED reason=ALIAS_INACTIVE_AT_WATERMARK witnesses=[]
+[PASS] file      F10            verdict=BLOCKED reason=TENANT_BOUNDARY_CROSSED witnesses=[]
+[PASS] file      F11            verdict=FREE reason=- witnesses=[]
+[PASS] file      F12A           verdict=HELD reason=- witnesses=[REF-12]
+[PASS] file      F12B           verdict=HELD reason=- witnesses=[REF-12]
+[PASS] file      F12C           verdict=FREE reason=- witnesses=[]
+[PASS] file      F14            verdict=HELD reason=- witnesses=[REF-14A]
+[PASS] record    REF-01         status=COMPLETE reason=-
+[PASS] record    REF-02         status=COMPLETE reason=-
+[PASS] record    REF-03A        status=COMPLETE reason=-
+[PASS] record    REF-03B        status=COMPLETE reason=-
+[PASS] record    REF-03C        status=COMPLETE reason=-
+[PASS] record    REF-04         status=COMPLETE reason=-
+[PASS] record    REF-05         status=COMPLETE reason=-
+[PASS] record    REF-06         status=REVOKED reason=RECORD_BATCH_UNDONE
+[PASS] record    REF-07         status=BROKEN reason=RENAME_BATCH_UNDONE
+[PASS] record    REF-08         status=BROKEN reason=ALIAS_INACTIVE_AT_WATERMARK
+[PASS] record    REF-09         status=BROKEN reason=ALIAS_CYCLE
+[PASS] record    REF-10         status=BROKEN reason=TENANT_BOUNDARY_CROSSED
+[PASS] record    REF-11         status=SELF_ONLY reason=SELF_SANDBOX_REFERENCE
+[PASS] record    REF-12         status=COMPLETE reason=-
+[PASS] record    REF-13         status=BROKEN reason=TARGET_NOT_RETAINED
+[PASS] record    REF-14A        status=COMPLETE reason=-
+[PASS] record    REF-14B        status=BROKEN reason=TARGET_NOT_RETAINED
+[PASS] summary   logical_files  expected 14 got 14
+[PASS] summary   held           expected 8 got 8
+[PASS] summary   blocked        expected 3 got 3
+[PASS] summary   free           expected 3 got 3
+[PASS] summary   records_total  expected 17 got 17
+[PASS] summary   records_complete expected 9 got 9
+[PASS] summary   records_broken expected 6 got 6
+[PASS] summary   records_revoked expected 1 got 1
+[PASS] summary   records_self_only expected 1 got 1
+[PASS] summary   boundary_violations expected 1 got 1
+[PASS] boundary  violations     expected count=1 kind="TENANT_BOUNDARY_CROSSED" got 1 [TENANT_BOUNDARY_CROSSED:REF-10]
+[PASS] invariant chains:F01     1 complete chain(s) verify
+[PASS] invariant chains:F02     1 complete chain(s) verify
+[PASS] invariant chains:F03     3 complete chain(s) verify
+[PASS] invariant chains:F04     1 complete chain(s) verify
+[PASS] invariant chains:F05     1 complete chain(s) verify
+[PASS] invariant chains:F12A    1 complete chain(s) verify
+[PASS] invariant chains:F12B    1 complete chain(s) verify
+[PASS] invariant chains:F14     1 complete chain(s) verify
+[PASS] invariant summary_held_eq_set summary.held=8 minimal_set=8
+---- verified 52 items: 52 passed, 0 failed — ALL CHECKS PASSED

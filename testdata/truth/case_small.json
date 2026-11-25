@@ -1,0 +1,125 @@
+{
+  "schema_version": "quaraudit.case/v1",
+  "case_id": "TRUTH-SMALL",
+  "title": "重命名 / 撤销同步 / 水位别名 / 租户边界 小型真值集",
+  "quarantine_root": "C:\\Isolation\\T100",
+  "owner_sandbox": "SBX-QUAR",
+  "tenant_roots": [
+    { "tenant": "T-ACME", "root": "C:\\Isolation\\T100" },
+    { "tenant": "T-ACME", "root": "V:\\Tenants\\acme" },
+    { "tenant": "T-GLOBEX", "root": "V:\\Tenants\\globex" }
+  ],
+  "files": [
+    { "id": "F01", "path": "C:\\Isolation\\T100\\files\\f01-direct.bin", "size": 4096, "tenant": "T-ACME" },
+    { "id": "F02", "path": "C:\\Isolation\\T100\\files\\f02-alias.bin", "size": 2048, "tenant": "T-ACME" },
+    { "id": "F03", "path": "C:\\Isolation\\T100\\files\\f03-multi.bin", "size": 8192, "tenant": "T-ACME" },
+    { "id": "F04", "path": "C:\\Isolation\\T100\\files\\sub dir\\f04 spaced name.bin", "size": 1024, "tenant": "T-ACME" },
+    { "id": "F05", "path": "C:\\Isolation\\T100\\files\\renamed\\f05-new.bin", "size": 100, "tenant": "T-ACME" },
+    { "id": "F06", "path": "C:\\Isolation\\T100\\files\\f06-undone.bin", "size": 101, "tenant": "T-ACME" },
+    { "id": "F07", "path": "C:\\Isolation\\T100\\files\\renamed\\f07-new.bin", "size": 102, "tenant": "T-ACME" },
+    { "id": "F08", "path": "C:\\Isolation\\T100\\wf\\f08-wm.bin", "size": 103, "tenant": "T-ACME" },
+    { "id": "F10", "path": "C:\\Isolation\\T100\\files\\f10-tenant.bin", "size": 104, "tenant": "T-ACME" },
+    { "id": "F11", "path": "C:\\Isolation\\T100\\files\\f11-self.bin", "size": 105, "tenant": "T-ACME" },
+    { "id": "F12A", "path": "C:\\Isolation\\T100\\files\\tree\\a\\fa.bin", "size": 106, "tenant": "T-ACME" },
+    { "id": "F12B", "path": "C:\\Isolation\\T100\\files\\tree\\b\\fb.bin", "size": 107, "tenant": "T-ACME" },
+    { "id": "F12C", "path": "C:\\Isolation\\T100\\files\\tree-other\\fc.bin", "size": 108, "tenant": "T-ACME" },
+    { "id": "F14", "path": "C:\\Isolation\\T100\\oldstore\\f14-wm.bin", "size": 109, "tenant": "T-ACME" }
+  ],
+  "events": [
+    { "type": "alias_upsert", "seq": 1, "wm": 1, "alias_id": "AL-MNT",
+      "alias": "D:\\sbx\\web\\mnt\\q", "target": "C:\\Isolation\\T100\\files" },
+    { "type": "alias_upsert", "seq": 2, "wm": 1, "alias_id": "AL-A",
+      "alias": "M:\\aa", "target": "C:\\Isolation\\T100\\files" },
+    { "type": "alias_upsert", "seq": 3, "wm": 1, "alias_id": "AL-BASE",
+      "alias": "B:\\base", "target": "C:\\Isolation\\T100" },
+    { "type": "alias_upsert", "seq": 4, "wm": 1, "alias_id": "AL-LINK",
+      "alias": "C:\\Isolation\\T100\\files-link", "target": "C:\\Isolation\\T100\\files" },
+    { "type": "alias_upsert", "seq": 5, "wm": 1, "alias_id": "AL-CA",
+      "alias": "Q:\\cycA", "target": "Q:\\cycB" },
+    { "type": "alias_upsert", "seq": 6, "wm": 1, "alias_id": "AL-CB",
+      "alias": "Q:\\cycB", "target": "Q:\\cycA" },
+    { "type": "alias_upsert", "seq": 7, "wm": 1, "alias_id": "AL-ROT",
+      "alias": "R:\\rot", "target": "C:\\Isolation\\T100\\oldstore" },
+    { "type": "alias_upsert", "seq": 8, "wm": 7, "alias_id": "AL-ROT",
+      "alias": "R:\\rot", "target": "C:\\Isolation\\T100\\newstore" },
+    { "type": "alias_upsert", "seq": 9, "wm": 9, "alias_id": "AL-FUTURE",
+      "alias": "W:\\future_link", "target": "C:\\Isolation\\T100\\wf" },
+    { "type": "alias_upsert", "seq": 10, "wm": 2, "alias_id": "AL-X-BORDER",
+      "alias": "V:\\Tenants\\globex\\portal", "target": "C:\\Isolation\\T100\\files",
+      "boundary_tenant": "T-GLOBEX" },
+
+    { "type": "rename", "seq": 11, "wm": 4,
+      "old_path": "C:\\Isolation\\T100\\files\\renamed\\f05-old.bin",
+      "new_path": "C:\\Isolation\\T100\\files\\renamed\\f05-new.bin" },
+    { "type": "rename", "seq": 12, "wm": 5, "batch": "B-SYNC-7",
+      "old_path": "C:\\Isolation\\T100\\files\\renamed\\f07-old.bin",
+      "new_path": "C:\\Isolation\\T100\\files\\renamed\\f07-new.bin" },
+
+    { "type": "reference", "seq": 20, "record": {
+      "id": "REF-01", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 3,
+      "raw_path": "  c:\\isolation\\\\T100/files\\F01-direct.BIN  " } },
+
+    { "type": "reference", "seq": 21, "record": {
+      "id": "REF-02", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 2,
+      "raw_path": "D:\\SBX\\Web\\MNT\\q\\f02-alias.bin" } },
+
+    { "type": "reference", "seq": 22, "record": {
+      "id": "REF-03A", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 2,
+      "raw_path": "M:\\\\aa\\\\f03-multi.bin" } },
+    { "type": "reference", "seq": 23, "record": {
+      "id": "REF-03B", "sandbox": "SBX-ANALYTICS", "tenant": "T-ACME", "wm": 3,
+      "raw_path": "B:\\base\\files-link\\f03-multi.bin" } },
+    { "type": "reference", "seq": 24, "record": {
+      "id": "REF-03C", "sandbox": "SBX-BACKUP", "tenant": "T-ACME", "wm": 4,
+      "raw_path": "C:\\Isolation\\T100\\.\\files\\\\f03-multi.bin" } },
+
+    { "type": "reference", "seq": 25, "record": {
+      "id": "REF-04", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 2,
+      "raw_path": "\tC:/Isolation/T100/files/sub dir/f04 spaced name.bin \r\n" } },
+
+    { "type": "reference", "seq": 26, "record": {
+      "id": "REF-05", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 6,
+      "raw_path": "C:\\Isolation\\T100\\files\\renamed\\f05-old.bin" } },
+
+    { "type": "reference", "seq": 27, "wm": 6, "batch": "B-SYNC-6", "record": {
+      "id": "REF-06", "sandbox": "SBX-WEB", "tenant": "T-ACME",
+      "raw_path": "C:\\Isolation\\T100\\files\\f06-undone.bin" } },
+    { "type": "undo_sync", "seq": 28, "wm": 10, "undo_batch": "B-SYNC-6" },
+
+    { "type": "reference", "seq": 29, "record": {
+      "id": "REF-07", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 7,
+      "raw_path": "C:\\Isolation\\T100\\files\\renamed\\f07-old.bin" } },
+    { "type": "undo_sync", "seq": 30, "wm": 11, "undo_batch": "B-SYNC-7" },
+
+    { "type": "reference", "seq": 31, "record": {
+      "id": "REF-08", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 3,
+      "raw_path": "W:\\future_link\\f08-wm.bin" } },
+
+    { "type": "reference", "seq": 32, "record": {
+      "id": "REF-09", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 2,
+      "raw_path": "Q:\\cycA\\x.bin" } },
+
+    { "type": "reference", "seq": 33, "record": {
+      "id": "REF-10", "sandbox": "SBX-GX", "tenant": "T-GLOBEX", "wm": 3,
+      "raw_path": "V:\\Tenants\\globex\\portal\\f10-tenant.bin" } },
+
+    { "type": "reference", "seq": 34, "record": {
+      "id": "REF-11", "sandbox": "SBX-QUAR", "tenant": "T-ACME", "wm": 2,
+      "raw_path": "C:\\Isolation\\T100\\files\\f11-self.bin" } },
+
+    { "type": "reference", "seq": 35, "record": {
+      "id": "REF-12", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 3, "kind": "tree",
+      "raw_path": "C:\\Isolation\\T100\\files\\tree" } },
+
+    { "type": "reference", "seq": 36, "record": {
+      "id": "REF-13", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 3,
+      "raw_path": "C:\\Isolation\\T100\\gone\\missing.bin" } },
+
+    { "type": "reference", "seq": 37, "record": {
+      "id": "REF-14A", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 3,
+      "raw_path": "R:\\rot\\f14-wm.bin" } },
+    { "type": "reference", "seq": 38, "record": {
+      "id": "REF-14B", "sandbox": "SBX-WEB", "tenant": "T-ACME", "wm": 8,
+      "raw_path": "R:\\rot\\f14-wm.bin" } }
+  ]
+}

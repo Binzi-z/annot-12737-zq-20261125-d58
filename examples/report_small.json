@@ -1,0 +1,1155 @@
+{
+  "schema": "quaraudit.report/v1",
+  "case_id": "TRUTH-SMALL",
+  "title": "重命名 / 撤销同步 / 水位别名 / 租户边界 小型真值集",
+  "quarantine_root": "C:\\Isolation\\T100",
+  "owner_sandbox": "SBX-QUAR",
+  "summary": {
+    "retained_input_rows": 14,
+    "logical_files": 14,
+    "merged_duplicate_rows": 0,
+    "held": 8,
+    "blocked": 3,
+    "free": 3,
+    "records_total": 17,
+    "records_complete": 9,
+    "records_broken": 6,
+    "records_revoked": 1,
+    "records_self_only": 1,
+    "chains_total": 18,
+    "chains_complete": 10,
+    "boundary_violations": 1
+  },
+  "minimal_non_recyclable": [
+    {
+      "file_id": "F01",
+      "all_file_ids": [
+        "F01"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f01-direct.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f01-direct.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-01"
+      ],
+      "chain_ids": [
+        "CH-REF-01-1"
+      ]
+    },
+    {
+      "file_id": "F02",
+      "all_file_ids": [
+        "F02"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f02-alias.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f02-alias.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-02"
+      ],
+      "chain_ids": [
+        "CH-REF-02-1"
+      ]
+    },
+    {
+      "file_id": "F03",
+      "all_file_ids": [
+        "F03"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f03-multi.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f03-multi.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-03A",
+        "REF-03B",
+        "REF-03C"
+      ],
+      "chain_ids": [
+        "CH-REF-03A-1",
+        "CH-REF-03B-1",
+        "CH-REF-03C-1"
+      ]
+    },
+    {
+      "file_id": "F04",
+      "all_file_ids": [
+        "F04"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\sub dir\\f04 spaced name.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\sub dir\\f04 spaced name.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-04"
+      ],
+      "chain_ids": [
+        "CH-REF-04-1"
+      ]
+    },
+    {
+      "file_id": "F05",
+      "all_file_ids": [
+        "F05"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\renamed\\f05-new.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\renamed\\f05-new.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-05"
+      ],
+      "chain_ids": [
+        "CH-REF-05-1"
+      ]
+    },
+    {
+      "file_id": "F12A",
+      "all_file_ids": [
+        "F12A"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\tree\\a\\fa.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree\\a\\fa.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-12"
+      ],
+      "chain_ids": [
+        "CH-REF-12-1"
+      ]
+    },
+    {
+      "file_id": "F12B",
+      "all_file_ids": [
+        "F12B"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\tree\\b\\fb.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree\\b\\fb.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-12"
+      ],
+      "chain_ids": [
+        "CH-REF-12-2"
+      ]
+    },
+    {
+      "file_id": "F14",
+      "all_file_ids": [
+        "F14"
+      ],
+      "logical_key": "c:\\isolation\\t100\\oldstore\\f14-wm.bin",
+      "display_path": "C:\\Isolation\\T100\\oldstore\\f14-wm.bin",
+      "tenant": "T-ACME",
+      "witness_records": [
+        "REF-14A"
+      ],
+      "chain_ids": [
+        "CH-REF-14A-1"
+      ]
+    }
+  ],
+  "blocked_pending_evidence": [
+    {
+      "file_id": "F07",
+      "logical_key": "c:\\isolation\\t100\\files\\renamed\\f07-new.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\renamed\\f07-new.bin",
+      "reason_code": "RENAME_BATCH_UNDONE",
+      "reason_message": "path only forwards via a rename from batch \"B-SYNC-7\" that undo_sync revoked",
+      "claim_records": [
+        "REF-07"
+      ]
+    },
+    {
+      "file_id": "F08",
+      "logical_key": "c:\\isolation\\t100\\wf\\f08-wm.bin",
+      "display_path": "C:\\Isolation\\T100\\wf\\f08-wm.bin",
+      "reason_code": "ALIAS_INACTIVE_AT_WATERMARK",
+      "reason_message": "alias AL-FUTURE is first mapped at a later watermark than the reference",
+      "claim_records": [
+        "REF-08"
+      ]
+    },
+    {
+      "file_id": "F10",
+      "logical_key": "c:\\isolation\\t100\\files\\f10-tenant.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f10-tenant.bin",
+      "reason_code": "TENANT_BOUNDARY_CROSSED",
+      "reason_message": "alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX",
+      "claim_records": [
+        "REF-10"
+      ]
+    }
+  ],
+  "recyclable": [
+    {
+      "file_id": "F06",
+      "logical_key": "c:\\isolation\\t100\\files\\f06-undone.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f06-undone.bin",
+      "reason": "no active external reference chain"
+    },
+    {
+      "file_id": "F11",
+      "logical_key": "c:\\isolation\\t100\\files\\f11-self.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f11-self.bin",
+      "reason": "no active external reference chain"
+    },
+    {
+      "file_id": "F12C",
+      "logical_key": "c:\\isolation\\t100\\files\\tree-other\\fc.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree-other\\fc.bin",
+      "reason": "no active external reference chain"
+    }
+  ],
+  "files": [
+    {
+      "file_id": "F01",
+      "all_file_ids": [
+        "F01"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f01-direct.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f01-direct.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-01"
+      ]
+    },
+    {
+      "file_id": "F02",
+      "all_file_ids": [
+        "F02"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f02-alias.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f02-alias.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-02"
+      ]
+    },
+    {
+      "file_id": "F03",
+      "all_file_ids": [
+        "F03"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f03-multi.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f03-multi.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-03A",
+        "REF-03B",
+        "REF-03C"
+      ]
+    },
+    {
+      "file_id": "F04",
+      "all_file_ids": [
+        "F04"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\sub dir\\f04 spaced name.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\sub dir\\f04 spaced name.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-04"
+      ]
+    },
+    {
+      "file_id": "F05",
+      "all_file_ids": [
+        "F05"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\renamed\\f05-new.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\renamed\\f05-new.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-05"
+      ]
+    },
+    {
+      "file_id": "F06",
+      "all_file_ids": [
+        "F06"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f06-undone.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f06-undone.bin",
+      "tenant": "T-ACME",
+      "verdict": "FREE"
+    },
+    {
+      "file_id": "F07",
+      "all_file_ids": [
+        "F07"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\renamed\\f07-new.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\renamed\\f07-new.bin",
+      "tenant": "T-ACME",
+      "verdict": "BLOCKED",
+      "reason_code": "RENAME_BATCH_UNDONE",
+      "blocking_records": [
+        "REF-07"
+      ]
+    },
+    {
+      "file_id": "F08",
+      "all_file_ids": [
+        "F08"
+      ],
+      "logical_key": "c:\\isolation\\t100\\wf\\f08-wm.bin",
+      "display_path": "C:\\Isolation\\T100\\wf\\f08-wm.bin",
+      "tenant": "T-ACME",
+      "verdict": "BLOCKED",
+      "reason_code": "ALIAS_INACTIVE_AT_WATERMARK",
+      "blocking_records": [
+        "REF-08"
+      ]
+    },
+    {
+      "file_id": "F10",
+      "all_file_ids": [
+        "F10"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f10-tenant.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f10-tenant.bin",
+      "tenant": "T-ACME",
+      "verdict": "BLOCKED",
+      "reason_code": "TENANT_BOUNDARY_CROSSED",
+      "blocking_records": [
+        "REF-10"
+      ]
+    },
+    {
+      "file_id": "F11",
+      "all_file_ids": [
+        "F11"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\f11-self.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\f11-self.bin",
+      "tenant": "T-ACME",
+      "verdict": "FREE"
+    },
+    {
+      "file_id": "F12A",
+      "all_file_ids": [
+        "F12A"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\tree\\a\\fa.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree\\a\\fa.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-12"
+      ]
+    },
+    {
+      "file_id": "F12B",
+      "all_file_ids": [
+        "F12B"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\tree\\b\\fb.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree\\b\\fb.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-12"
+      ]
+    },
+    {
+      "file_id": "F12C",
+      "all_file_ids": [
+        "F12C"
+      ],
+      "logical_key": "c:\\isolation\\t100\\files\\tree-other\\fc.bin",
+      "display_path": "C:\\Isolation\\T100\\files\\tree-other\\fc.bin",
+      "tenant": "T-ACME",
+      "verdict": "FREE"
+    },
+    {
+      "file_id": "F14",
+      "all_file_ids": [
+        "F14"
+      ],
+      "logical_key": "c:\\isolation\\t100\\oldstore\\f14-wm.bin",
+      "display_path": "C:\\Isolation\\T100\\oldstore\\f14-wm.bin",
+      "tenant": "T-ACME",
+      "verdict": "HELD",
+      "witness_records": [
+        "REF-14A"
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "chain_id": "CH-REF-01-1",
+      "record_id": "REF-01",
+      "file_id": "F01",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-01 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\f01-direct.bin",
+          "from": "  c:\\isolation\\\\T100/files\\F01-direct.BIN  ",
+          "to": "C:\\isolation\\T100\\files\\F01-direct.BIN"
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F01",
+          "from": "c:\\isolation\\t100\\files\\f01-direct.bin",
+          "to": "C:\\Isolation\\T100\\files\\f01-direct.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-02-1",
+      "record_id": "REF-02",
+      "file_id": "F02",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-02 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e d:\\sbx\\web\\mnt\\q\\f02-alias.bin",
+          "from": "D:\\SBX\\Web\\MNT\\q\\f02-alias.bin",
+          "to": "D:\\SBX\\Web\\MNT\\q\\f02-alias.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-MNT active at watermark 1",
+          "from": "d:\\sbx\\web\\mnt\\q\\f02-alias.bin",
+          "to": "c:\\isolation\\t100\\files\\f02-alias.bin",
+          "alias_id": "AL-MNT",
+          "wm": 1
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F02",
+          "from": "c:\\isolation\\t100\\files\\f02-alias.bin",
+          "to": "C:\\Isolation\\T100\\files\\f02-alias.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-03A-1",
+      "record_id": "REF-03A",
+      "file_id": "F03",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-03A from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e m:\\aa\\f03-multi.bin",
+          "from": "M:\\\\aa\\\\f03-multi.bin",
+          "to": "M:\\aa\\f03-multi.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-A active at watermark 1",
+          "from": "m:\\aa\\f03-multi.bin",
+          "to": "c:\\isolation\\t100\\files\\f03-multi.bin",
+          "alias_id": "AL-A",
+          "wm": 1
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F03",
+          "from": "c:\\isolation\\t100\\files\\f03-multi.bin",
+          "to": "C:\\Isolation\\T100\\files\\f03-multi.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-03B-1",
+      "record_id": "REF-03B",
+      "file_id": "F03",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-ANALYTICS",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-03B from sandbox SBX-ANALYTICS"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e b:\\base\\files-link\\f03-multi.bin",
+          "from": "B:\\base\\files-link\\f03-multi.bin",
+          "to": "B:\\base\\files-link\\f03-multi.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-BASE active at watermark 1",
+          "from": "b:\\base\\files-link\\f03-multi.bin",
+          "to": "c:\\isolation\\t100\\files-link\\f03-multi.bin",
+          "alias_id": "AL-BASE",
+          "wm": 1
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-LINK active at watermark 1",
+          "from": "c:\\isolation\\t100\\files-link\\f03-multi.bin",
+          "to": "c:\\isolation\\t100\\files\\f03-multi.bin",
+          "alias_id": "AL-LINK",
+          "wm": 1
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F03",
+          "from": "c:\\isolation\\t100\\files\\f03-multi.bin",
+          "to": "C:\\Isolation\\T100\\files\\f03-multi.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-03C-1",
+      "record_id": "REF-03C",
+      "file_id": "F03",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-BACKUP",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-03C from sandbox SBX-BACKUP"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\f03-multi.bin",
+          "from": "C:\\Isolation\\T100\\.\\files\\\\f03-multi.bin",
+          "to": "C:\\Isolation\\T100\\files\\f03-multi.bin"
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F03",
+          "from": "c:\\isolation\\t100\\files\\f03-multi.bin",
+          "to": "C:\\Isolation\\T100\\files\\f03-multi.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-04-1",
+      "record_id": "REF-04",
+      "file_id": "F04",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-04 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\sub dir\\f04 spaced name.bin",
+          "from": "\tC:/Isolation/T100/files/sub dir/f04 spaced name.bin \r\n",
+          "to": "C:\\Isolation\\T100\\files\\sub dir\\f04 spaced name.bin"
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F04",
+          "from": "c:\\isolation\\t100\\files\\sub dir\\f04 spaced name.bin",
+          "to": "C:\\Isolation\\T100\\files\\sub dir\\f04 spaced name.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-05-1",
+      "record_id": "REF-05",
+      "file_id": "F05",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-05 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\renamed\\f05-old.bin",
+          "from": "C:\\Isolation\\T100\\files\\renamed\\f05-old.bin",
+          "to": "C:\\Isolation\\T100\\files\\renamed\\f05-old.bin"
+        },
+        {
+          "kind": "rename_forward",
+          "detail": "forwarded across an active rename arrival",
+          "from": "c:\\isolation\\t100\\files\\renamed\\f05-old.bin",
+          "to": "c:\\isolation\\t100\\files\\renamed\\f05-new.bin"
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F05",
+          "from": "c:\\isolation\\t100\\files\\renamed\\f05-new.bin",
+          "to": "C:\\Isolation\\T100\\files\\renamed\\f05-new.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-06-1",
+      "record_id": "REF-06",
+      "status": "REVOKED",
+      "reason_code": "RECORD_BATCH_UNDONE",
+      "reason_message": "record arrived in sync batch \"B-SYNC-6\" which was revoked by undo_sync",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-06 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "terminal",
+          "detail": "record arrived in sync batch \"B-SYNC-6\" which was revoked by undo_sync"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-07-1",
+      "record_id": "REF-07",
+      "file_id": "F07",
+      "status": "BROKEN",
+      "reason_code": "RENAME_BATCH_UNDONE",
+      "reason_message": "path only forwards via a rename from batch \"B-SYNC-7\" that undo_sync revoked",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-07 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\renamed\\f07-old.bin",
+          "from": "C:\\Isolation\\T100\\files\\renamed\\f07-old.bin",
+          "to": "C:\\Isolation\\T100\\files\\renamed\\f07-old.bin"
+        },
+        {
+          "kind": "rename_revoked",
+          "detail": "path only forwards via a rename from batch \"B-SYNC-7\" that undo_sync revoked",
+          "from": "c:\\isolation\\t100\\files\\renamed\\f07-old.bin",
+          "to": "c:\\isolation\\t100\\files\\renamed\\f07-new.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: RENAME_BATCH_UNDONE"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-08-1",
+      "record_id": "REF-08",
+      "file_id": "F08",
+      "status": "BROKEN",
+      "reason_code": "ALIAS_INACTIVE_AT_WATERMARK",
+      "reason_message": "alias AL-FUTURE is first mapped at a later watermark than the reference",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-08 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e w:\\future_link\\f08-wm.bin",
+          "from": "W:\\future_link\\f08-wm.bin",
+          "to": "W:\\future_link\\f08-wm.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: ALIAS_INACTIVE_AT_WATERMARK"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-09-1",
+      "record_id": "REF-09",
+      "status": "BROKEN",
+      "reason_code": "ALIAS_CYCLE",
+      "reason_message": "alias cycle detected revisiting AL-CA",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-09 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e q:\\cyca\\x.bin",
+          "from": "Q:\\cycA\\x.bin",
+          "to": "Q:\\cycA\\x.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-CA active at watermark 1",
+          "from": "q:\\cyca\\x.bin",
+          "to": "q:\\cycb\\x.bin",
+          "alias_id": "AL-CA",
+          "wm": 1
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-CB active at watermark 1",
+          "from": "q:\\cycb\\x.bin",
+          "to": "q:\\cyca\\x.bin",
+          "alias_id": "AL-CB",
+          "wm": 1
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: ALIAS_CYCLE"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-10-1",
+      "record_id": "REF-10",
+      "file_id": "F10",
+      "status": "BROKEN",
+      "reason_code": "TENANT_BOUNDARY_CROSSED",
+      "reason_message": "alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX",
+      "source_sandbox": "SBX-GX",
+      "source_tenant": "T-GLOBEX",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-10 from sandbox SBX-GX"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e v:\\tenants\\globex\\portal\\f10-tenant.bin",
+          "from": "V:\\Tenants\\globex\\portal\\f10-tenant.bin",
+          "to": "V:\\Tenants\\globex\\portal\\f10-tenant.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-X-BORDER active at watermark 2",
+          "from": "v:\\tenants\\globex\\portal\\f10-tenant.bin",
+          "to": "c:\\isolation\\t100\\files\\f10-tenant.bin",
+          "alias_id": "AL-X-BORDER",
+          "wm": 2
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: TENANT_BOUNDARY_CROSSED"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-11-1",
+      "record_id": "REF-11",
+      "file_id": "F11",
+      "status": "SELF_ONLY",
+      "reason_code": "SELF_SANDBOX_REFERENCE",
+      "reason_message": "reference originates from the quarantine-owning sandbox, not another sandbox",
+      "source_sandbox": "SBX-QUAR",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-11 from sandbox SBX-QUAR"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\f11-self.bin",
+          "from": "C:\\Isolation\\T100\\files\\f11-self.bin",
+          "to": "C:\\Isolation\\T100\\files\\f11-self.bin"
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F11",
+          "from": "c:\\isolation\\t100\\files\\f11-self.bin",
+          "to": "C:\\Isolation\\T100\\files\\f11-self.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "reference originates from the quarantine-owning sandbox, not another sandbox"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-12-1",
+      "record_id": "REF-12",
+      "file_id": "F12A",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "tree",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-12 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\tree",
+          "from": "C:\\Isolation\\T100\\files\\tree",
+          "to": "C:\\Isolation\\T100\\files\\tree"
+        },
+        {
+          "kind": "inventory_prefix_match",
+          "detail": "resolved logical target matches retained object F12A",
+          "from": "c:\\isolation\\t100\\files\\tree",
+          "to": "C:\\Isolation\\T100\\files\\tree\\a\\fa.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-12-2",
+      "record_id": "REF-12",
+      "file_id": "F12B",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "tree",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-12 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\files\\tree",
+          "from": "C:\\Isolation\\T100\\files\\tree",
+          "to": "C:\\Isolation\\T100\\files\\tree"
+        },
+        {
+          "kind": "inventory_prefix_match",
+          "detail": "resolved logical target matches retained object F12B",
+          "from": "c:\\isolation\\t100\\files\\tree",
+          "to": "C:\\Isolation\\T100\\files\\tree\\b\\fb.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-13-1",
+      "record_id": "REF-13",
+      "status": "BROKEN",
+      "reason_code": "TARGET_NOT_RETAINED",
+      "reason_message": "resolved logical target c:\\isolation\\t100\\gone\\missing.bin matches no retained file (record may be stale or point outside quarantine)",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-13 from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e c:\\isolation\\t100\\gone\\missing.bin",
+          "from": "C:\\Isolation\\T100\\gone\\missing.bin",
+          "to": "C:\\Isolation\\T100\\gone\\missing.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: TARGET_NOT_RETAINED"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-14A-1",
+      "record_id": "REF-14A",
+      "file_id": "F14",
+      "status": "COMPLETE",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "match_kind": "file",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-14A from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e r:\\rot\\f14-wm.bin",
+          "from": "R:\\rot\\f14-wm.bin",
+          "to": "R:\\rot\\f14-wm.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-ROT active at watermark 1",
+          "from": "r:\\rot\\f14-wm.bin",
+          "to": "c:\\isolation\\t100\\oldstore\\f14-wm.bin",
+          "alias_id": "AL-ROT",
+          "wm": 1
+        },
+        {
+          "kind": "inventory_match",
+          "detail": "resolved logical target matches retained object F14",
+          "from": "c:\\isolation\\t100\\oldstore\\f14-wm.bin",
+          "to": "C:\\Isolation\\T100\\oldstore\\f14-wm.bin"
+        },
+        {
+          "kind": "terminal",
+          "detail": "external sandbox reference verified end to end"
+        }
+      ]
+    },
+    {
+      "chain_id": "CH-REF-14B-1",
+      "record_id": "REF-14B",
+      "status": "BROKEN",
+      "reason_code": "TARGET_NOT_RETAINED",
+      "reason_message": "resolved logical target c:\\isolation\\t100\\newstore\\f14-wm.bin matches no retained file (record may be stale or point outside quarantine)",
+      "source_sandbox": "SBX-WEB",
+      "source_tenant": "T-ACME",
+      "links": [
+        {
+          "kind": "record",
+          "detail": "synthetic reference record REF-14B from sandbox SBX-WEB"
+        },
+        {
+          "kind": "normalize",
+          "detail": "drive-case/separator/whitespace canonicalization -\u003e r:\\rot\\f14-wm.bin",
+          "from": "R:\\rot\\f14-wm.bin",
+          "to": "R:\\rot\\f14-wm.bin"
+        },
+        {
+          "kind": "alias_reparse",
+          "detail": "reparse alias AL-ROT active at watermark 7",
+          "from": "r:\\rot\\f14-wm.bin",
+          "to": "c:\\isolation\\t100\\newstore\\f14-wm.bin",
+          "alias_id": "AL-ROT",
+          "wm": 7
+        },
+        {
+          "kind": "terminal",
+          "detail": "chain broken: TARGET_NOT_RETAINED"
+        }
+      ]
+    }
+  ],
+  "record_results": [
+    {
+      "record_id": "REF-01",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-01-1"
+      ],
+      "matched_file_ids": [
+        "F01"
+      ]
+    },
+    {
+      "record_id": "REF-02",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-02-1"
+      ],
+      "matched_file_ids": [
+        "F02"
+      ]
+    },
+    {
+      "record_id": "REF-03A",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-03A-1"
+      ],
+      "matched_file_ids": [
+        "F03"
+      ]
+    },
+    {
+      "record_id": "REF-03B",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-03B-1"
+      ],
+      "matched_file_ids": [
+        "F03"
+      ]
+    },
+    {
+      "record_id": "REF-03C",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-03C-1"
+      ],
+      "matched_file_ids": [
+        "F03"
+      ]
+    },
+    {
+      "record_id": "REF-04",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-04-1"
+      ],
+      "matched_file_ids": [
+        "F04"
+      ]
+    },
+    {
+      "record_id": "REF-05",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-05-1"
+      ],
+      "matched_file_ids": [
+        "F05"
+      ]
+    },
+    {
+      "record_id": "REF-06",
+      "status": "REVOKED",
+      "reason_code": "RECORD_BATCH_UNDONE",
+      "reason_message": "record arrived in sync batch \"B-SYNC-6\" which was revoked by undo_sync",
+      "chain_ids": [
+        "CH-REF-06-1"
+      ]
+    },
+    {
+      "record_id": "REF-07",
+      "status": "BROKEN",
+      "reason_code": "RENAME_BATCH_UNDONE",
+      "reason_message": "path only forwards via a rename from batch \"B-SYNC-7\" that undo_sync revoked",
+      "chain_ids": [
+        "CH-REF-07-1"
+      ]
+    },
+    {
+      "record_id": "REF-08",
+      "status": "BROKEN",
+      "reason_code": "ALIAS_INACTIVE_AT_WATERMARK",
+      "reason_message": "alias AL-FUTURE is first mapped at a later watermark than the reference",
+      "chain_ids": [
+        "CH-REF-08-1"
+      ]
+    },
+    {
+      "record_id": "REF-09",
+      "status": "BROKEN",
+      "reason_code": "ALIAS_CYCLE",
+      "reason_message": "alias cycle detected revisiting AL-CA",
+      "chain_ids": [
+        "CH-REF-09-1"
+      ]
+    },
+    {
+      "record_id": "REF-10",
+      "status": "BROKEN",
+      "reason_code": "TENANT_BOUNDARY_CROSSED",
+      "reason_message": "alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX",
+      "chain_ids": [
+        "CH-REF-10-1"
+      ]
+    },
+    {
+      "record_id": "REF-11",
+      "status": "SELF_ONLY",
+      "reason_code": "SELF_SANDBOX_REFERENCE",
+      "chain_ids": [
+        "CH-REF-11-1"
+      ]
+    },
+    {
+      "record_id": "REF-12",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-12-1",
+        "CH-REF-12-2"
+      ],
+      "matched_file_ids": [
+        "F12A",
+        "F12B"
+      ]
+    },
+    {
+      "record_id": "REF-13",
+      "status": "BROKEN",
+      "reason_code": "TARGET_NOT_RETAINED",
+      "reason_message": "resolved logical target c:\\isolation\\t100\\gone\\missing.bin matches no retained file (record may be stale or point outside quarantine)",
+      "chain_ids": [
+        "CH-REF-13-1"
+      ]
+    },
+    {
+      "record_id": "REF-14A",
+      "status": "COMPLETE",
+      "chain_ids": [
+        "CH-REF-14A-1"
+      ],
+      "matched_file_ids": [
+        "F14"
+      ]
+    },
+    {
+      "record_id": "REF-14B",
+      "status": "BROKEN",
+      "reason_code": "TARGET_NOT_RETAINED",
+      "reason_message": "resolved logical target c:\\isolation\\t100\\newstore\\f14-wm.bin matches no retained file (record may be stale or point outside quarantine)",
+      "chain_ids": [
+        "CH-REF-14B-1"
+      ]
+    }
+  ],
+  "boundary_violations": [
+    {
+      "record_id": "REF-10",
+      "file_id": "F10",
+      "kind": "TENANT_BOUNDARY_CROSSED",
+      "detail": "alias AL-X-BORDER rewrites into tenant T-ACME, outside boundary tenant T-GLOBEX"
+    }
+  ]
+}
